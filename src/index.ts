@@ -45,12 +45,13 @@ async function run(tools: Toolkit) {
         jql: `project = CN and key in (${jiraIssueCodes.join(',')}) ORDER BY created DESC`
     })
 
-    if (result) {
-        console.log(result.issues)
+    if (result !== undefined && result.issues) {
+        for (const issue of result.issues) {
+            console.log(issue.fields.issueType)
+        }
     }
 
     // haal issues op uit jira
-
 
     // filter op story/bugfixes
 
