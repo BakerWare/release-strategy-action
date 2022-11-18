@@ -91615,6 +91615,7 @@ const tools = new actions_toolkit_1.Toolkit({
     secrets: [
         'JIRA_USER',
         'JIRA_PASS',
+        'GITHUB_TOKEN',
     ]
 });
 function run(tools) {
@@ -91660,6 +91661,7 @@ function run(tools) {
                 }
             }
         }
+        tools.token = process.env.GITHUB_TOKEN;
         yield tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
             owner: 'Thijs-Van-Drongelen',
             repo: 'release-strategy-action',

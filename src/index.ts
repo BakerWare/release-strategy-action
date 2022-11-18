@@ -7,6 +7,7 @@ const tools = new Toolkit({
     secrets: [
         'JIRA_USER',
         'JIRA_PASS',
+        'GITHUB_TOKEN',
     ]
 })
 
@@ -63,6 +64,8 @@ async function run(tools: Toolkit) {
             }
         }
     }
+
+    tools.token = process.env.GITHUB_TOKEN as string;
 
     await tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
         owner: 'Thijs-Van-Drongelen',

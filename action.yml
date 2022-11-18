@@ -7,8 +7,3 @@ runs:
 branding:
     icon: crosshair
     color: gray-dark
-inputs:
-    github_token:
-        description: ":)"
-        required: true
-        default: ""
