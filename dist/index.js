@@ -88494,6 +88494,7 @@ function run(tools) {
         const result = yield client.issueSearch.searchForIssuesUsingJql({
             jql: `project = CN and key in (${jiraIssueCodes.join(',')}) ORDER BY created DESC`
         });
+        console.log(result);
         if (result !== undefined && result.issues) {
             for (const issue of result.issues) {
                 console.log(issue.fields.issueType);
