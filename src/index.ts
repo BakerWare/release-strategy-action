@@ -41,12 +41,12 @@ async function run(tools: Toolkit) {
 
     console.log(`project = CN and key in (${jiraIssueCodes.join(',')})`)
 
-    const issues = await client.issueSearch.getIssuePickerResource({
-        query: `project = CN and key in (${jiraIssueCodes.join(',')}) ORDER BY created DESC`
+    const result = await client.issueSearch.searchForIssuesUsingJql({
+        jql: `project = CN and key in (${jiraIssueCodes.join(',')}) ORDER BY created DESC`
     })
 
-    if (issues) {
-        console.log(issues?.sections?.[0].issues)
+    if (result) {
+        console.log(result.issues)
     }
 
     // haal issues op uit jira
