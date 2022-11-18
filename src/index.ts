@@ -47,7 +47,7 @@ async function run(tools: Toolkit) {
         for (const issue of result.issues) {
             const type = issue.fields.issuetype?.name; // Bug | Story | Task | Refactor
 
-            console.log(issue)
+            console.log(issue.key)
         }
     }
 
