@@ -52,14 +52,20 @@ async function run(tools: Toolkit) {
 
             if (type === IssueType.Bug) {
                 version?.inc('patch');
+
+                console.log('patching')
             }
 
             if (type === IssueType.Story) {
                 version?.inc('minor');
+
+                console.log('new minor')
             }
 
             if (type === IssueType.Refactor) {
                 version?.inc('patch');
+
+                console.log('patching w refactor')
             }
         }
     }
