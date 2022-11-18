@@ -40,6 +40,8 @@ async function run(tools: Toolkit) {
         },
     });
 
+    console.log(`project = CN and key in (${jiraIssueCodes.join(',')})`)
+
     const issues = await client.issueSearch.getIssuePickerResource<SuggestedIssue[]>({
         query: `project = CN and key in (${jiraIssueCodes.join(',')})`
     })

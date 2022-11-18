@@ -88490,6 +88490,7 @@ function run(tools) {
                 },
             },
         });
+        console.log(`project = CN and key in (${jiraIssueCodes.join(',')})`);
         const issues = yield client.issueSearch.getIssuePickerResource({
             query: `project = CN and key in (${jiraIssueCodes.join(',')})`
         });
