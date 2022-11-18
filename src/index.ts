@@ -1,6 +1,7 @@
 import { Toolkit } from "actions-toolkit";
 import { getCommitsSinceLatestTag, getJiraIssueCodesFromCommits, getLatestTag } from "./utils/git.util";
 import { Version3Client } from "jira.js";
+import {SuggestedIssue} from "jira.js/src/version3/models/suggestedIssue";
 
 const tools = new Toolkit({
     secrets: [
@@ -39,7 +40,11 @@ async function run(tools: Toolkit) {
         },
     });
 
-    console.log(client)
+    const issues = await client.issueSearch.getIssuePickerResource<SuggestedIssue[]>({
+        query: `project = CN and key in (${jiraIssueCodes.join(',')})`
+    })
+
+    console.log(issues.length)
 
     // haal issues op uit jira
 

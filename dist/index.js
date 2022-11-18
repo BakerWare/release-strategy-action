@@ -88490,7 +88490,10 @@ function run(tools) {
                 },
             },
         });
-        console.log(client);
+        const issues = yield client.issueSearch.getIssuePickerResource({
+            query: `project = CN and key in (${jiraIssueCodes.join(',')})`
+        });
+        console.log(issues.length);
         // haal issues op uit jira
         // filter op story/bugfixes
         // semver die shit
