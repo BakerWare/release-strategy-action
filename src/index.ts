@@ -74,27 +74,27 @@ async function run(tools: Toolkit) {
         target_commitish: 'main',
         name: `v${version?.raw}`,
         body: `
-        ### Fixed
-        
-            - WM-123 Test 1
-            - WM-123 Test 2
-            - WM-123 Test 3
-            - WM-123 Test 4      
-            
-        ### Added  
-        
-            - WM-123 Test 5
-            - WM-123 Test 6   
-        
-        ### Refactor  
-        
-            - WM-123 Test 7
-            - WM-123 Test 8     
-            
-        ### Tasks  
-        
-            - WM-123 Test 9
-            - WM-123 Test 10  
+### Fixed
+
+    - WM-123 Test 1
+    - WM-123 Test 2
+    - WM-123 Test 3
+    - WM-123 Test 4      
+    
+### Added  
+
+    - WM-123 Test 5
+    - WM-123 Test 6   
+
+### Refactor  
+
+    - WM-123 Test 7
+    - WM-123 Test 8     
+    
+### Tasks  
+
+    - WM-123 Test 9
+    - WM-123 Test 10  
         `,
         draft: false,
         prerelease: false,
