@@ -1,6 +1,7 @@
 import { Toolkit } from "actions-toolkit";
 import { getCommitsSinceLatestTag, getJiraIssueCodesFromCommits, getLatestTag } from "./utils/git.util";
 import { Version3Client } from "jira.js";
+import semver from "semver";
 
 const tools = new Toolkit({
     secrets: [
@@ -43,21 +44,36 @@ async function run(tools: Toolkit) {
         jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created DESC`
     })
 
+    const version = semver.coerce(latestTag);
+
     if (result !== undefined && result.issues) {
         for (const issue of result.issues) {
-            const type = issue.fields.issuetype?.name; // Bug | Story | Task | Refactor
+            const type = issue.fields.issuetype?.name;
 
-            console.log(issue.key)
+            if (type === IssueType.Bug) {
+                version?.inc('patch');
+            }
+
+            if (type === IssueType.Story) {
+                version?.inc('minor');
+            }
+
+            if (type === IssueType.Refactor) {
+                version?.inc('patch');
+            }
         }
     }
 
-    // haal issues op uit jira
+    console.log(version);
 
-    // filter op story/bugfixes
-
-    // semver die shit
-
-    // release met tag
+    // Release notes github
 }
 
 run(tools);
+
+enum IssueType {
+    Bug = 'Bug',
+    Story = 'Story',
+    Refactor = 'Refactor',
+    // Tasl = 'Task',
+}

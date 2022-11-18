@@ -18,9 +18,11 @@
         "@types/node": "^16",
         "actions-toolkit": "^6.0.1",
         "jira.js": "^2.15.14",
+        "semver": "^7.3.8",
         "typescript": "^3.9.2"
     },
     "devDependencies": {
+        "@types/semver": "^7.3.13",
         "@vercel/ncc": "^0.34.0"
     }
 }
