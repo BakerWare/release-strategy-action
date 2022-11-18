@@ -20033,7 +20033,13 @@ const actions_toolkit_1 = __nccwpck_require__(7045);
 const git_util_1 = __nccwpck_require__(8720);
 actions_toolkit_1.Toolkit.run((tools) => __awaiter(void 0, void 0, void 0, function* () {
     const latestTag = yield git_util_1.getLatestTag(tools);
+    if (!latestTag) {
+        tools.exit.failure('No valid tag found');
+    }
     const commits = yield git_util_1.getCommitsSinceLatestTag(tools, latestTag);
+    if (!commits) {
+        tools.exit.failure('No new changes found');
+    }
     console.log(commits);
 }));
 
