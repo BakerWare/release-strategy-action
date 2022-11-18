@@ -91668,7 +91668,29 @@ function run(tools) {
             tag_name: `v${version === null || version === void 0 ? void 0 : version.raw}`,
             target_commitish: 'main',
             name: `v${version === null || version === void 0 ? void 0 : version.raw}`,
-            body: 'Description of the release',
+            body: `
+        ### Fixed
+        
+            - WM-123 Test 1
+            - WM-123 Test 2
+            - WM-123 Test 3
+            - WM-123 Test 4      
+            
+        ### Added  
+        
+            - WM-123 Test 5
+            - WM-123 Test 6   
+        
+        ### Refactor  
+        
+            - WM-123 Test 7
+            - WM-123 Test 8     
+            
+        ### Tasks  
+        
+            - WM-123 Test 9
+            - WM-123 Test 10  
+        `,
             draft: false,
             prerelease: false,
             generate_release_notes: false
