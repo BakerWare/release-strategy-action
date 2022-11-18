@@ -88496,8 +88496,8 @@ function run(tools) {
         });
         if (result !== undefined && result.issues) {
             for (const issue of result.issues) {
-                const type = (_a = issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
-                console.log(type);
+                const type = (_a = issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name; // Bug | Story | Task | Refactor
+                console.log(issue);
             }
         }
     });

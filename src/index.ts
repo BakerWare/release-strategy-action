@@ -45,9 +45,9 @@ async function run(tools: Toolkit) {
 
     if (result !== undefined && result.issues) {
         for (const issue of result.issues) {
-            const type = issue.fields.issuetype?.name;
+            const type = issue.fields.issuetype?.name; // Bug | Story | Task | Refactor
 
-            console.log(type)
+            console.log(issue)
         }
     }
 
