@@ -91670,26 +91670,25 @@ function run(tools) {
             name: `v${version === null || version === void 0 ? void 0 : version.raw}`,
             body: `
 ### Fixed
-
-    - WM-123 Test 1
-    - WM-123 Test 2
-    - WM-123 Test 3
-    - WM-123 Test 4      
+- WM-123 Test 1 | @RFreij
+- WM-123 Test 2 | @Thijs-van-Drongelen
+- WM-123 Test 3 | @RFreij
+- WM-123 Test 4 | @Thijs-van-Drongelen      
     
 ### Added  
 
-    - WM-123 Test 5
-    - WM-123 Test 6   
+- WM-123 Test 5 | @RFreij
+- WM-123 Test 6 | @Thijs-van-Drongelen 
 
 ### Refactor  
 
-    - WM-123 Test 7
-    - WM-123 Test 8     
+- WM-123 Test 7 | @RFreij
+- WM-123 Test 8 | @Thijs-van-Drongelen     
     
 ### Tasks  
 
-    - WM-123 Test 9
-    - WM-123 Test 10  
+- WM-123 Test 9 | @RFreij
+- WM-123 Test 10 | @Thijs-van-Drongelen 
         `,
             draft: false,
             prerelease: false,
