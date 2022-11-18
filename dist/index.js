@@ -88467,6 +88467,7 @@ const tools = new actions_toolkit_1.Toolkit({
     ]
 });
 function run(tools) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const latestTag = yield git_util_1.getLatestTag(tools);
         if (!latestTag) {
@@ -88495,13 +88496,8 @@ function run(tools) {
             query: `project = CN and key in (${jiraIssueCodes.join(',')}) ORDER BY created DESC`
         });
         if (issues) {
-            // @ts-ignore
-            console.log(issues.sections[0].issues);
+            console.log((_a = issues === null || issues === void 0 ? void 0 : issues.sections) === null || _a === void 0 ? void 0 : _a[0].issues);
         }
-        // haal issues op uit jira
-        // filter op story/bugfixes
-        // semver die shit
-        // release met tag
     });
 }
 run(tools);
