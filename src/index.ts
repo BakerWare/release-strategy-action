@@ -29,8 +29,6 @@ async function run(tools: Toolkit) {
         tools.exit.failure('No new commits with jira code found since previous release');
     }
 
-    console.log(jiraIssueCodes)
-
     const client = new Version3Client({
         host: 'https://bakerware.atlassian.net',
         newErrorHandling: true,
@@ -43,7 +41,7 @@ async function run(tools: Toolkit) {
     });
 
     const result = await client.issueSearch.searchForIssuesUsingJql({
-        jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created DESC`
+        jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
     })
 
     const version = semver.coerce(latestTag);
@@ -52,24 +50,16 @@ async function run(tools: Toolkit) {
         for (const issue of result.issues) {
             const type = issue.fields.issuetype?.name;
 
-            console.log(type)
-
             if (type === IssueType.Bug) {
                 version?.inc('patch');
-
-                console.log('patching')
             }
 
             if (type === IssueType.Story) {
                 version?.inc('minor');
-
-                console.log('new minor')
             }
 
             if (type === IssueType.Refactor) {
                 version?.inc('patch');
-
-                console.log('patching w refactor')
             }
         }
     }

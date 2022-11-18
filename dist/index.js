@@ -91632,7 +91632,6 @@ function run(tools) {
         if (!jiraIssueCodes) {
             tools.exit.failure('No new commits with jira code found since previous release');
         }
-        console.log(jiraIssueCodes);
         const client = new jira_js_1.Version3Client({
             host: 'https://bakerware.atlassian.net',
             newErrorHandling: true,
@@ -91644,24 +91643,20 @@ function run(tools) {
             },
         });
         const result = yield client.issueSearch.searchForIssuesUsingJql({
-            jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created DESC`
+            jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
         });
         const version = semver_1.default.coerce(latestTag);
         if (result !== undefined && result.issues) {
             for (const issue of result.issues) {
                 const type = (_a = issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
-                console.log(type);
                 if (type === IssueType.Bug) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
-                    console.log('patching');
                 }
                 if (type === IssueType.Story) {
                     version === null || version === void 0 ? void 0 : version.inc('minor');
-                    console.log('new minor');
                 }
                 if (type === IssueType.Refactor) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
-                    console.log('patching w refactor');
                 }
             }
         }
