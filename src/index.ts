@@ -42,11 +42,15 @@ async function run(tools: Toolkit) {
 
     console.log(`project = CN and key in (${jiraIssueCodes.join(',')})`)
 
-    const issues = await client.issueSearch.getIssuePickerResource<SuggestedIssue[]>({
+    const issues = await client.issueSearch.getIssuePickerResource({
         query: `project = CN and key in (${jiraIssueCodes.join(',')}) ORDER BY created DESC`
     })
 
-    console.log(issues)
+    if (issues) {
+        // @ts-ignore
+        console.log(issues.sections[0].issues)
+    }
+
 
     // haal issues op uit jira
 

@@ -88494,7 +88494,10 @@ function run(tools) {
         const issues = yield client.issueSearch.getIssuePickerResource({
             query: `project = CN and key in (${jiraIssueCodes.join(',')}) ORDER BY created DESC`
         });
-        console.log(issues);
+        if (issues) {
+            // @ts-ignore
+            console.log(issues.sections[0].issues);
+        }
         // haal issues op uit jira
         // filter op story/bugfixes
         // semver die shit
