@@ -22,11 +22,15 @@ async function run(tools: Toolkit) {
         tools.exit.failure('No commits found since previous release');
     }
 
+    console.log(commits);
+
     const jiraIssueCodes = getJiraIssueCodesFromCommits(commits);
 
     if (!jiraIssueCodes) {
         tools.exit.failure('No new commits with jira code found since previous release');
     }
+
+    console.log(jiraIssueCodes)
 
     const client = new Version3Client({
         host: 'https://bakerware.atlassian.net',
@@ -42,14 +46,14 @@ async function run(tools: Toolkit) {
     console.log(`project = CN and key in (${jiraIssueCodes.join(',')})`)
 
     const result = await client.issueSearch.searchForIssuesUsingJql({
-        jql: `project = CN and key in (${jiraIssueCodes.join(',')}) ORDER BY created DESC`
+        jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created DESC`
     })
-
-    console.log(result)
 
     if (result !== undefined && result.issues) {
         for (const issue of result.issues) {
-            console.log(issue.fields.issuetype)
+            const type = issue.fields.issuetype;
+
+            console.log(type)
         }
     }
 
