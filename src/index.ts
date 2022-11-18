@@ -49,7 +49,7 @@ async function run(tools: Toolkit) {
 
     if (result !== undefined && result.issues) {
         for (const issue of result.issues) {
-            console.log(issue.fields)
+            console.log(issue.fields.issuetype)
         }
     }
 

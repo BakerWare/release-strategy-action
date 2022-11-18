@@ -88497,7 +88497,7 @@ function run(tools) {
         console.log(result);
         if (result !== undefined && result.issues) {
             for (const issue of result.issues) {
-                console.log(issue.fields);
+                console.log(issue.fields.issuetype);
             }
         }
         // haal issues op uit jira
