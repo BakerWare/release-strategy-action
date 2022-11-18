@@ -91651,12 +91651,15 @@ function run(tools) {
                 const type = (_a = issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
                 if (type === IssueType.Bug) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
+                    console.log('patching');
                 }
                 if (type === IssueType.Story) {
                     version === null || version === void 0 ? void 0 : version.inc('minor');
+                    console.log('new minor');
                 }
                 if (type === IssueType.Refactor) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
+                    console.log('patching w refactor');
                 }
             }
         }
@@ -91695,6 +91698,7 @@ function getLatestTag(tools) {
     return __awaiter(this, void 0, void 0, function* () {
         let latestTag = '';
         yield tools.exec('git describe --tags --abbrev=0', [], {
+            silent: true,
             listeners: {
                 stdout: (buffer) => {
                     latestTag = buffer.toString("utf-8").replace('\n', '');
@@ -91709,6 +91713,7 @@ function getCommitsSinceLatestTag(tools, latestTag) {
     return __awaiter(this, void 0, void 0, function* () {
         let commits = [];
         yield tools.exec(`git log ${latestTag}..HEAD --oneline`, [], {
+            silent: true,
             listeners: {
                 stdout: (buffer) => {
                     commits = buffer.toString('utf-8').split('\n');
