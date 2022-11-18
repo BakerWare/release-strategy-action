@@ -29,6 +29,8 @@ async function run(tools: Toolkit) {
         tools.exit.failure('No new commits with jira code found since previous release');
     }
 
+    console.log(jiraIssueCodes)
+
     const client = new Version3Client({
         host: 'https://bakerware.atlassian.net',
         newErrorHandling: true,
@@ -49,6 +51,8 @@ async function run(tools: Toolkit) {
     if (result !== undefined && result.issues) {
         for (const issue of result.issues) {
             const type = issue.fields.issuetype?.name;
+
+            console.log(type)
 
             if (type === IssueType.Bug) {
                 version?.inc('patch');
