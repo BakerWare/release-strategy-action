@@ -91660,7 +91660,17 @@ function run(tools) {
                 }
             }
         }
-        console.log(version);
+        yield tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
+            owner: 'Thijs-Van-Drongelen',
+            repo: 'release-strategy-action',
+            tag_name: `v${version === null || version === void 0 ? void 0 : version.raw}`,
+            target_commitish: 'main',
+            name: `v${version === null || version === void 0 ? void 0 : version.raw}`,
+            body: 'Description of the release',
+            draft: false,
+            prerelease: false,
+            generate_release_notes: false
+        });
     });
 }
 run(tools);

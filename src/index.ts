@@ -64,9 +64,17 @@ async function run(tools: Toolkit) {
         }
     }
 
-    console.log(version);
-
-    // Release notes github
+    await tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
+        owner: 'Thijs-Van-Drongelen',
+        repo: 'release-strategy-action',
+        tag_name: `v${version?.raw}`,
+        target_commitish: 'main',
+        name: `v${version?.raw}`,
+        body: 'Description of the release',
+        draft: false,
+        prerelease: false,
+        generate_release_notes: false
+    });
 }
 
 run(tools);
