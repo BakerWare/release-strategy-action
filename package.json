@@ -21,7 +21,6 @@
         "typescript": "^3.9.2"
     },
     "devDependencies": {
-        "@vercel/ncc": "^0.34.0",
-        "ts-node": "^10.9.1"
+        "@vercel/ncc": "^0.34.0"
     }
 }
