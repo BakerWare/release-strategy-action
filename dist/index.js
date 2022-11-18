@@ -20040,7 +20040,12 @@ actions_toolkit_1.Toolkit.run((tools) => __awaiter(void 0, void 0, void 0, funct
     if (!commits) {
         tools.exit.failure('No new changes found');
     }
-    console.log(commits);
+    const jiraIssueCodes = git_util_1.getJiraIssueCodesFromCommits(commits);
+    console.log(jiraIssueCodes);
+    // haal issues op uit jira
+    // filter op story/bugfixes
+    // semver die shit
+    // release met tag
 }));
 
 
@@ -20061,7 +20066,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getCommitsSinceLatestTag = exports.getLatestTag = void 0;
+exports.getJiraIssueCodesFromCommits = exports.getCommitsSinceLatestTag = exports.getLatestTag = void 0;
 function getLatestTag(tools) {
     return __awaiter(this, void 0, void 0, function* () {
         let latestTag = '';
@@ -20090,6 +20095,18 @@ function getCommitsSinceLatestTag(tools, latestTag) {
     });
 }
 exports.getCommitsSinceLatestTag = getCommitsSinceLatestTag;
+function getJiraIssueCodesFromCommits(commits) {
+    const regex = '((?<!([A-Z]{1,10})-?)[A-Z]+-\\d+)';
+    const jiraIssueCodes = [];
+    for (const commit of commits) {
+        const res = commit.match(regex);
+        if (res) {
+            jiraIssueCodes.push(res[0]);
+        }
+    }
+    return jiraIssueCodes;
+}
+exports.getJiraIssueCodesFromCommits = getJiraIssueCodesFromCommits;
 
 
 /***/ }),

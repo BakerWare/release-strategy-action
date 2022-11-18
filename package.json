@@ -17,6 +17,7 @@
     "dependencies": {
         "@types/node": "^16",
         "actions-toolkit": "^6.0.1",
+        "jira.js": "^2.15.14",
         "typescript": "^3.9.2"
     },
     "devDependencies": {

@@ -1,5 +1,5 @@
 import { Toolkit } from "actions-toolkit";
-import { getCommitsSinceLatestTag, getLatestTag } from "./utils/git.util";
+import {getCommitsSinceLatestTag, getJiraIssueCodesFromCommits, getLatestTag} from "./utils/git.util";
 
 Toolkit.run(async tools => {
     const latestTag = await getLatestTag(tools);
@@ -14,5 +14,15 @@ Toolkit.run(async tools => {
         tools.exit.failure('No new changes found');
     }
 
-    console.log(commits)
+    const jiraIssueCodes = getJiraIssueCodesFromCommits(commits);
+
+    console.log(jiraIssueCodes);
+
+    // haal issues op uit jira
+
+    // filter op story/bugfixes
+
+    // semver die shit
+
+    // release met tag
 })

@@ -27,3 +27,18 @@ export async function getCommitsSinceLatestTag(tools: Toolkit, latestTag: string
 
     return commits;
 }
+
+export function getJiraIssueCodesFromCommits(commits: string[]): string[] {
+    const regex = '((?<!([A-Z]{1,10})-?)[A-Z]+-\\d+)'
+    const jiraIssueCodes = [];
+
+    for (const commit of commits) {
+        const res = commit.match(regex);
+
+        if (res) {
+            jiraIssueCodes.push(res[0])
+        }
+    }
+
+    return jiraIssueCodes;
+}
