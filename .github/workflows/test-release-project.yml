@@ -1,0 +1,16 @@
+name: Test Release
+
+on:
+    workflow_call:
+
+jobs:
+    something:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
+            -   name: Do something
+                uses: BakerWare/release-strategy-action@main
+                with:
+                    github_token: ${{ github.token }}

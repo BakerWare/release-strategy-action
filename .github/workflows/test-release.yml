@@ -1,0 +1,9 @@
+name: Test release nieuwe versie
+
+on:
+    workflow_dispatch:
+
+jobs:
+    release:
+        uses: bakerware/release-strategy-action/.github/workflows/test-release-project.yml@main
+        secrets: inherit

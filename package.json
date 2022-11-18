@@ -1,0 +1,26 @@
+{
+    "name": "@bakerware/release-strategy-action",
+    "private": true,
+    "description": "Github action that automates release notes",
+    "main": "src/index.ts",
+    "scripts": {
+        "build": "ncc build",
+        "start": "ts-node src/index.ts",
+        "test": "echo \"Error: no test specified\" && exit 0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/BakerWare/release-strategy-action.git"
+    },
+    "author": "Thijs van Drongelen",
+    "license": "ISC",
+    "dependencies": {
+        "@types/node": "^16",
+        "actions-toolkit": "^6.0.1",
+        "typescript": "^3.9.2"
+    },
+    "devDependencies": {
+        "@vercel/ncc": "^0.34.0",
+        "ts-node": "^10.9.1"
+    }
+}

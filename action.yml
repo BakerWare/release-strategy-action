@@ -1,0 +1,14 @@
+name: release-strategy-action
+description: Github action that automates release notes
+author: Thijs-Van-Drongelen
+runs:
+    using: "node16"
+    main: "./dist/index.js"
+branding:
+    icon: crosshair
+    color: gray-dark
+inputs:
+    github_token:
+        description: ":)"
+        required: true
+        default: ""
