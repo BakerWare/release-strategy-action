@@ -12,5 +12,6 @@ jobs:
                     fetch-depth: 0
             -   name: Do something
                 uses: BakerWare/release-strategy-action@main
-                with:
-                    github_token: ${{ github.token }}
+                env:
+                    JIRA_USER: ${{ secrets.JIRA_USER }}
+                    JIRA_PASS: ${{ secrets.JIRA_PASS }}

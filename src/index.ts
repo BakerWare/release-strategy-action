@@ -1,7 +1,15 @@
 import { Toolkit } from "actions-toolkit";
-import {getCommitsSinceLatestTag, getJiraIssueCodesFromCommits, getLatestTag} from "./utils/git.util";
+import { getCommitsSinceLatestTag, getJiraIssueCodesFromCommits, getLatestTag } from "./utils/git.util";
+import { Version3Client } from "jira.js";
 
-Toolkit.run(async tools => {
+const tools = new Toolkit({
+    secrets: [
+        'JIRA_USER',
+        'JIRA_PASS',
+    ]
+})
+
+async function run(tools: Toolkit) {
     const latestTag = await getLatestTag(tools);
 
     if (!latestTag) {
@@ -11,12 +19,27 @@ Toolkit.run(async tools => {
     const commits = await getCommitsSinceLatestTag(tools, latestTag);
 
     if (!commits) {
-        tools.exit.failure('No new changes found');
+        tools.exit.failure('No commits found since previous release');
     }
 
     const jiraIssueCodes = getJiraIssueCodesFromCommits(commits);
 
-    console.log(jiraIssueCodes);
+    if (!jiraIssueCodes) {
+        tools.exit.failure('No new commits with jira code found since previous release');
+    }
+
+    const client = new Version3Client({
+        host: 'https://bakerware.atlassian.net',
+        newErrorHandling: true,
+        authentication: {
+            basic: {
+                username: process.env.JIRA_USER as string,
+                password: process.env.JIRA_PASS as string,
+            },
+        },
+    });
+
+    console.log(client)
 
     // haal issues op uit jira
 
@@ -25,4 +48,6 @@ Toolkit.run(async tools => {
     // semver die shit
 
     // release met tag
-})
+}
+
+run(tools);
