@@ -88467,6 +88467,7 @@ const tools = new actions_toolkit_1.Toolkit({
     ]
 });
 function run(tools) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const latestTag = yield git_util_1.getLatestTag(tools);
         if (!latestTag) {
@@ -88476,12 +88477,10 @@ function run(tools) {
         if (!commits) {
             tools.exit.failure('No commits found since previous release');
         }
-        console.log(commits);
         const jiraIssueCodes = git_util_1.getJiraIssueCodesFromCommits(commits);
         if (!jiraIssueCodes) {
             tools.exit.failure('No new commits with jira code found since previous release');
         }
-        console.log(jiraIssueCodes);
         const client = new jira_js_1.Version3Client({
             host: 'https://bakerware.atlassian.net',
             newErrorHandling: true,
@@ -88492,20 +88491,15 @@ function run(tools) {
                 },
             },
         });
-        console.log(`project = CN and key in (${jiraIssueCodes.join(',')})`);
         const result = yield client.issueSearch.searchForIssuesUsingJql({
             jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created DESC`
         });
         if (result !== undefined && result.issues) {
             for (const issue of result.issues) {
-                const type = issue.fields.issuetype;
+                const type = (_a = issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
                 console.log(type);
             }
         }
-        // haal issues op uit jira
-        // filter op story/bugfixes
-        // semver die shit
-        // release met tag
     });
 }
 run(tools);
