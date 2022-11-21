@@ -67,6 +67,7 @@ async function run(tools: Toolkit) {
         tasks: [],
     }
 
+    console.log(commits.length)
     console.log(commits)
 
     for (const commit of commits) {

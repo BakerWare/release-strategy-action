@@ -91656,6 +91656,7 @@ function run(tools) {
             refactors: [],
             tasks: [],
         };
+        console.log(commits.length);
         console.log(commits);
         for (const commit of commits) {
             const code = git_util_1.getJiraCodeFromString(commit);
