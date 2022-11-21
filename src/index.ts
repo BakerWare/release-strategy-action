@@ -7,6 +7,7 @@ import {
 } from "./utils/git.util";
 import { Version3Client } from "jira.js";
 import semver from "semver";
+import { IssueType } from "./types/issue-type";
 
 const tools = new Toolkit({
     secrets: [
@@ -159,10 +160,3 @@ ${notes.tasks.map(a => `
 }
 
 run(tools);
-
-enum IssueType {
-    Bug = 'Bug',
-    Story = 'Story',
-    Refactor = 'Refactor',
-    Task = 'Taak',
-}
