@@ -91661,60 +91661,68 @@ function run(tools) {
             const issue = result.issues.find(i => i.key === code);
             const type = (_a = issue === null || issue === void 0 ? void 0 : issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
             if (issue) {
-                console.log(issue);
-                // if (type === IssueType.Bug) {
-                //     version?.inc('patch');
-                //
-                //     notes.fixed.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
-                // }
-                //
-                // if (type === IssueType.Story) {
-                //     version?.inc('minor');
-                //
-                //     notes.added.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
-                // }
-                //
-                // if (type === IssueType.Refactor) {
-                //     version?.inc('patch');
-                //
-                //     notes.refactors.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
-                // }
-                //
-                // if (type === IssueType.Task) {
-                //     notes.tasks.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
-                // }
+                if (type === IssueType.Bug) {
+                    version === null || version === void 0 ? void 0 : version.inc('patch');
+                    notes.fixed.push(`${issue.key} ${issue.fields.summary}`);
+                }
+                if (type === IssueType.Story) {
+                    version === null || version === void 0 ? void 0 : version.inc('minor');
+                    notes.added.push(`${issue.key} ${issue.fields.summary}`);
+                }
+                if (type === IssueType.Refactor) {
+                    version === null || version === void 0 ? void 0 : version.inc('patch');
+                    notes.refactors.push(`${issue.key} ${issue.fields.summary}`);
+                }
+                if (type === IssueType.Task) {
+                    notes.tasks.push(`${issue.key} ${issue.fields.summary}`);
+                }
             }
         }
         tools.token = process.env.GITHUB_TOKEN;
-        console.log(notes);
+        const fixed = `
+ ### Fixed
+${notes.fixed.map(a => `
+- ${a}
+`).join('')}   
+`;
+        const added = `
+ ### Added
+${notes.added.map(a => `
+- ${a}
+`).join('')}   
+`;
+        const refactors = `
+ ### Refactor
+${notes.refactors.map(a => `
+- ${a}
+`).join('')}   
+`;
+        const tasks = `
+ ### Tasks
+${notes.tasks.map(a => `
+- ${a}
+`).join('')}   
+`;
+        let body = '';
+        if (notes.fixed) {
+            body += fixed;
+        }
+        if (notes.added) {
+            body += added;
+        }
+        if (notes.refactors) {
+            body += refactors;
+        }
+        if (notes.tasks) {
+            body += tasks;
+        }
         yield tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
             owner: 'Thijs-Van-Drongelen',
             repo: 'release-strategy-action',
             tag_name: `v${version === null || version === void 0 ? void 0 : version.raw}`,
             target_commitish: 'main',
             name: `v${version === null || version === void 0 ? void 0 : version.raw}`,
-            body: `
-### Fixed
-- WM-123 Test 1 | @RFreij
-- WM-123 Test 2 | @Thijs-van-Drongelen
-- WM-123 Test 3 | @RFreij
-- WM-123 Test 4 | @Thijs-van-Drongelen      
-    
-### Added  
-
-- WM-123 Test 5 | @RFreij
-- WM-123 Test 6 | @Thijs-van-Drongelen 
-
-### Refactor  
-
-- WM-123 Test 7 | @RFreij
-- WM-123 Test 8 | @Thijs-van-Drongelen     
-    
-### Tasks  
-
-- WM-123 Test 9 | @RFreij
-- WM-123 Test 10 | @Thijs-van-Drongelen 
-        `,
+            body: body,
             draft: false,
             prerelease: false,
             generate_release_notes: false
