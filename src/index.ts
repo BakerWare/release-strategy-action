@@ -74,27 +74,28 @@ async function run(tools: Toolkit) {
         const type = issue?.fields.issuetype?.name;
 
         if (issue) {
-            if (type === IssueType.Bug) {
-                version?.inc('patch');
-
-                notes.fixed.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
-            }
-
-            if (type === IssueType.Story) {
-                version?.inc('minor');
-
-                notes.added.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
-            }
-
-            if (type === IssueType.Refactor) {
-                version?.inc('patch');
-
-                notes.refactors.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
-            }
-
-            if (type === IssueType.Task) {
-                notes.tasks.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
-            }
+            console.log(issue);
+            // if (type === IssueType.Bug) {
+            //     version?.inc('patch');
+            //
+            //     notes.fixed.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
+            // }
+            //
+            // if (type === IssueType.Story) {
+            //     version?.inc('minor');
+            //
+            //     notes.added.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
+            // }
+            //
+            // if (type === IssueType.Refactor) {
+            //     version?.inc('patch');
+            //
+            //     notes.refactors.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
+            // }
+            //
+            // if (type === IssueType.Task) {
+            //     notes.tasks.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
+            // }
         }
     }
 
