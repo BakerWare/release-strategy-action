@@ -24,15 +24,6 @@ jobs:
                     from_branch: develop
                     target_branch: main
                     github_token: ${{ github.token }}
-#        steps:
-#            -   name: Merge develop into main
-#                uses: tukasz/direct-merge-action@master
-#                with:
-#                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#                    owner: BakerWare
-#                    repo: ${{ github.event.repository.name }}
-#                    source-branch: develop
-#                    target-branch: main
 
     release:
         needs: merge
