@@ -91656,6 +91656,7 @@ function run(tools) {
             refactors: [],
             tasks: [],
         };
+        console.log(commits);
         for (const commit of commits) {
             const code = git_util_1.getJiraCodeFromString(commit);
             const issue = result.issues.find(i => i.key === code);
@@ -91704,18 +91705,19 @@ ${notes.tasks.map(a => `
 `).join('')}   
 `;
         let body = '';
-        if (notes.fixed) {
+        if (notes.fixed.length > 0) {
             body += fixed;
         }
-        if (notes.added) {
+        if (notes.added.length > 0) {
             body += added;
         }
-        if (notes.refactors) {
+        if (notes.refactors.length > 0) {
             body += refactors;
         }
-        if (notes.tasks) {
+        if (notes.tasks.length > 0) {
             body += tasks;
         }
+        console.log(notes);
         yield tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
             owner: 'Thijs-Van-Drongelen',
             repo: 'release-strategy-action',
