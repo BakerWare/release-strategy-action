@@ -6,6 +6,7 @@ on:
             merge-develop-to-main:
                 type: boolean
                 description: Merge develop to main
+                default: false
 
 jobs:
     release:

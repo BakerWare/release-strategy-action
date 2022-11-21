@@ -9,6 +9,7 @@ on:
             merge-to-develop:
                 type: boolean
                 required: true
+                default: false
 
 jobs:
     merge:
