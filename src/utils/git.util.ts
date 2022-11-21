@@ -22,7 +22,7 @@ export async function getCommitsSinceLatestTag(tools: Toolkit, latestTag: string
         silent: false,
         listeners: {
             stdout: (buffer) => {
-                buffer.toString('utf-8').split('\n');
+                commits = buffer.toString('utf-8').split('\n');
             }
         }
     })
