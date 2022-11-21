@@ -159,4 +159,6 @@ ${notes.tasks.map(a => `
     })
 }
 
-run(tools);
+run(tools).catch((e) => {
+    console.error(e)
+});

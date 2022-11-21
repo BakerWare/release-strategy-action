@@ -91722,7 +91722,9 @@ ${notes.tasks.map(a => `
         yield tools.github.repos.createRelease(Object.assign({ tag_name: `v${version === null || version === void 0 ? void 0 : version.raw}`, target_commitish: 'main', name: `v${version === null || version === void 0 ? void 0 : version.raw}`, body: body, prerelease: false, draft: false }, tools.context.repo));
     });
 }
-run(tools);
+run(tools).catch((e) => {
+    console.error(e);
+});
 
 
 /***/ }),
