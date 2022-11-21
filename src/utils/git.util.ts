@@ -27,7 +27,7 @@ export async function getCommitsSinceLatestTag(tools: Toolkit, latestTag: string
         }
     })
 
-    return commits;
+    return commits.reverse();
 }
 
 export function getJiraIssueCodesFromCommits(commits: string[]): string[] {

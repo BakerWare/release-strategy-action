@@ -91661,6 +91661,7 @@ function run(tools) {
             const code = git_util_1.getJiraCodeFromString(commit);
             const issue = result.issues.find(i => i.key === code);
             const type = (_a = issue === null || issue === void 0 ? void 0 : issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
+            console.log(type);
             if (issue) {
                 if (type === IssueType.Bug) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
@@ -91785,7 +91786,7 @@ function getCommitsSinceLatestTag(tools, latestTag) {
                 }
             }
         });
-        return commits;
+        return commits.reverse();
     });
 }
 exports.getCommitsSinceLatestTag = getCommitsSinceLatestTag;

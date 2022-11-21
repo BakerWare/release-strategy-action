@@ -75,6 +75,8 @@ async function run(tools: Toolkit) {
 
         const type = issue?.fields.issuetype?.name;
 
+        console.log(type)
+
         if (issue) {
             if (type === IssueType.Bug) {
                 version?.inc('patch');
