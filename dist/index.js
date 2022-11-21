@@ -91611,6 +91611,7 @@ const actions_toolkit_1 = __nccwpck_require__(7045);
 const git_util_1 = __nccwpck_require__(18720);
 const jira_js_1 = __nccwpck_require__(74689);
 const semver_1 = __importDefault(__nccwpck_require__(11383));
+const issue_type_1 = __nccwpck_require__(47515);
 const tools = new actions_toolkit_1.Toolkit({
     secrets: [
         'JIRA_USER',
@@ -91663,19 +91664,19 @@ function run(tools) {
             const issue = result.issues.find(i => i.key === code);
             const type = (_a = issue === null || issue === void 0 ? void 0 : issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
             if (issue) {
-                if (type === IssueType.Bug) {
+                if (type === issue_type_1.IssueType.Bug) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
                     notes.fixed.push(`${issue.key} ${issue.fields.summary}`);
                 }
-                if (type === IssueType.Story) {
+                if (type === issue_type_1.IssueType.Story) {
                     version === null || version === void 0 ? void 0 : version.inc('minor');
                     notes.added.push(`${issue.key} ${issue.fields.summary}`);
                 }
-                if (type === IssueType.Refactor) {
+                if (type === issue_type_1.IssueType.Refactor) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
                     notes.refactors.push(`${issue.key} ${issue.fields.summary}`);
                 }
-                if (type === IssueType.Task) {
+                if (type === issue_type_1.IssueType.Task) {
                     notes.tasks.push(`${issue.key} ${issue.fields.summary}`);
                 }
             }
@@ -91722,13 +91723,24 @@ ${notes.tasks.map(a => `
     });
 }
 run(tools);
+
+
+/***/ }),
+
+/***/ 47515:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.IssueType = void 0;
 var IssueType;
 (function (IssueType) {
     IssueType["Bug"] = "Bug";
     IssueType["Story"] = "Story";
     IssueType["Refactor"] = "Refactor";
     IssueType["Task"] = "Taak";
-})(IssueType || (IssueType = {}));
+})(IssueType = exports.IssueType || (exports.IssueType = {}));
 
 
 /***/ }),
