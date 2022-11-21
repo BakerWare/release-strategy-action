@@ -105,28 +105,28 @@ async function run(tools: Toolkit) {
     tools.token = process.env.GITHUB_TOKEN as string;
 
 const fixed = `
- ### Fixed
+ ### :bug: Fixed
 ${notes.fixed.map(a => `
 - ${a}
 `).join('')}   
 `;
 
 const added = `
- ### Added
+ ### :chart_with_upwards_trend: Added
 ${notes.added.map(a => `
 - ${a}
 `).join('')}   
 `;
 
 const refactors = `
- ### Refactor
+ ### :wrench: Refactor
 ${notes.refactors.map(a => `
 - ${a}
 `).join('')}   
 `;
 
 const tasks = `
- ### Tasks
+ ### :white_check_mark: Tasks
 ${notes.tasks.map(a => `
 - ${a}
 `).join('')}   
