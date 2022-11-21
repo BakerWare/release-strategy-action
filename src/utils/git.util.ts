@@ -17,15 +17,18 @@ export async function getLatestTag(tools: Toolkit): Promise<string> {
 
 export async function getCommitsSinceLatestTag(tools: Toolkit, latestTag: string): Promise<string[]> {
     let commits: string[] = [];
+    let myOutput = '';
 
     await tools.exec(`git log ${latestTag}..HEAD --oneline`, [],{
         silent: false,
         listeners: {
-            stdout: (buffer) => {
-                commits = buffer.toString('utf-8').split('\n');
+            stdout: (data) => {
+                myOutput += data.toString('utf-8');
             }
         }
     })
+
+    commits = myOutput.split('\n');
 
     return commits.reverse();
 }

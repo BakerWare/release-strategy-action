@@ -91779,14 +91779,16 @@ exports.getLatestTag = getLatestTag;
 function getCommitsSinceLatestTag(tools, latestTag) {
     return __awaiter(this, void 0, void 0, function* () {
         let commits = [];
+        let myOutput = '';
         yield tools.exec(`git log ${latestTag}..HEAD --oneline`, [], {
             silent: false,
             listeners: {
-                stdout: (buffer) => {
-                    commits = buffer.toString('utf-8').split('\n');
+                stdout: (data) => {
+                    myOutput += data.toString('utf-8');
                 }
             }
         });
+        commits = myOutput.split('\n');
         return commits.reverse();
     });
 }
