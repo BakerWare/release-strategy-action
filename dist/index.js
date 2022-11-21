@@ -91646,22 +91646,40 @@ function run(tools) {
         const result = yield client.issueSearch.searchForIssuesUsingJql({
             jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
         });
+        if (!result.issues) {
+            tools.exit.failure('No jira issues found');
+        }
         const version = semver_1.default.coerce(latestTag);
-        if (result !== undefined && result.issues) {
-            for (const issue of result.issues) {
-                const type = (_a = issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
+        const notes = {
+            fixed: [],
+            added: [],
+            refactors: [],
+            tasks: [],
+        };
+        for (const commit of commits) {
+            const code = git_util_1.getJiraCodeFromString(commit);
+            const issue = result.issues.find(i => i.key === code);
+            const type = (_a = issue === null || issue === void 0 ? void 0 : issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
+            if (issue) {
                 if (type === IssueType.Bug) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
+                    notes.fixed.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`);
                 }
                 if (type === IssueType.Story) {
                     version === null || version === void 0 ? void 0 : version.inc('minor');
+                    notes.added.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`);
                 }
                 if (type === IssueType.Refactor) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
+                    notes.refactors.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`);
+                }
+                if (type === IssueType.Task) {
+                    notes.tasks.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`);
                 }
             }
         }
         tools.token = process.env.GITHUB_TOKEN;
+        console.log(notes);
         yield tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
             owner: 'Thijs-Van-Drongelen',
             repo: 'release-strategy-action',
@@ -91702,7 +91720,7 @@ var IssueType;
     IssueType["Bug"] = "Bug";
     IssueType["Story"] = "Story";
     IssueType["Refactor"] = "Refactor";
-    // Tasl = 'Task',
+    IssueType["Task"] = "Task";
 })(IssueType || (IssueType = {}));
 
 
@@ -91723,7 +91741,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getJiraIssueCodesFromCommits = exports.getCommitsSinceLatestTag = exports.getLatestTag = void 0;
+exports.getJiraCodeFromString = exports.getJiraIssueCodesFromCommits = exports.getCommitsSinceLatestTag = exports.getLatestTag = void 0;
 function getLatestTag(tools) {
     return __awaiter(this, void 0, void 0, function* () {
         let latestTag = '';
@@ -91755,17 +91773,25 @@ function getCommitsSinceLatestTag(tools, latestTag) {
 }
 exports.getCommitsSinceLatestTag = getCommitsSinceLatestTag;
 function getJiraIssueCodesFromCommits(commits) {
-    const regex = '((?<!([A-Z]{1,10})-?)[A-Z]+-\\d+)';
     const jiraIssueCodes = [];
     for (const commit of commits) {
-        const res = commit.match(regex);
-        if (res) {
-            jiraIssueCodes.push(res[0]);
+        const code = getJiraCodeFromString(commit);
+        if (code) {
+            jiraIssueCodes.push(code);
         }
     }
     return jiraIssueCodes;
 }
 exports.getJiraIssueCodesFromCommits = getJiraIssueCodesFromCommits;
+function getJiraCodeFromString(commit) {
+    const regex = '((?<!([A-Z]{1,10})-?)[A-Z]+-\\d+)';
+    const res = commit.match(regex);
+    if (res) {
+        return res[0];
+    }
+    return undefined;
+}
+exports.getJiraCodeFromString = getJiraCodeFromString;
 
 
 /***/ }),

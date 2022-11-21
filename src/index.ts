@@ -1,5 +1,10 @@
 import { Toolkit } from "actions-toolkit";
-import { getCommitsSinceLatestTag, getJiraIssueCodesFromCommits, getLatestTag } from "./utils/git.util";
+import {
+    getCommitsSinceLatestTag,
+    getJiraCodeFromString,
+    getJiraIssueCodesFromCommits,
+    getLatestTag
+} from "./utils/git.util";
 import { Version3Client } from "jira.js";
 import semver from "semver";
 
@@ -45,27 +50,57 @@ async function run(tools: Toolkit) {
         jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
     })
 
+    if (!result.issues) {
+        tools.exit.failure('No jira issues found');
+    }
+
     const version = semver.coerce(latestTag);
+    const notes: {
+        fixed: string[],
+        added: string[],
+        refactors: string[],
+        tasks: string[],
+    } = {
+        fixed: [],
+        added: [],
+        refactors: [],
+        tasks: [],
+    }
 
-    if (result !== undefined && result.issues) {
-        for (const issue of result.issues) {
-            const type = issue.fields.issuetype?.name;
+    for (const commit of commits) {
+        const code = getJiraCodeFromString(commit);
+        const issue = result.issues.find(i => i.key === code);
 
+        const type = issue?.fields.issuetype?.name;
+
+        if (issue) {
             if (type === IssueType.Bug) {
                 version?.inc('patch');
+
+                notes.fixed.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
             }
 
             if (type === IssueType.Story) {
                 version?.inc('minor');
+
+                notes.added.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
             }
 
             if (type === IssueType.Refactor) {
                 version?.inc('patch');
+
+                notes.refactors.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
+            }
+
+            if (type === IssueType.Task) {
+                notes.tasks.push(`${issue.key} ${issue.fields.summary} | @${issue.fields.assignee.name}`)
             }
         }
     }
 
     tools.token = process.env.GITHUB_TOKEN as string;
+
+    console.log(notes)
 
     await tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
         owner: 'Thijs-Van-Drongelen',
@@ -107,5 +142,5 @@ enum IssueType {
     Bug = 'Bug',
     Story = 'Story',
     Refactor = 'Refactor',
-    // Tasl = 'Task',
+    Task = 'Task',
 }

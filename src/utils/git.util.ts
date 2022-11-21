@@ -31,16 +31,26 @@ export async function getCommitsSinceLatestTag(tools: Toolkit, latestTag: string
 }
 
 export function getJiraIssueCodesFromCommits(commits: string[]): string[] {
-    const regex = '((?<!([A-Z]{1,10})-?)[A-Z]+-\\d+)'
     const jiraIssueCodes = [];
 
     for (const commit of commits) {
-        const res = commit.match(regex);
+        const code = getJiraCodeFromString(commit);
 
-        if (res) {
-            jiraIssueCodes.push(res[0])
+        if (code) {
+            jiraIssueCodes.push(code)
         }
     }
 
     return jiraIssueCodes;
+}
+
+export function getJiraCodeFromString(commit: string): undefined | string {
+    const regex = '((?<!([A-Z]{1,10})-?)[A-Z]+-\\d+)'
+    const res = commit.match(regex);
+
+    if (res) {
+        return res[0];
+    }
+
+    return undefined;
 }
