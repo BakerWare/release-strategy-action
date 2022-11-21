@@ -20,19 +20,19 @@ async function run(tools: Toolkit) {
     const latestTag = await getLatestTag(tools);
 
     if (!latestTag) {
-        tools.exit.failure('No valid tag found');
+        await tools.exit.failure('No valid tag found');
     }
 
     const commits = await getCommitsSinceLatestTag(tools, latestTag);
 
     if (!commits) {
-        tools.exit.failure('No commits found since previous release');
+        await tools.exit.failure('No commits found since previous release');
     }
 
     const jiraIssueCodes = getJiraIssueCodesFromCommits(commits);
 
     if (!jiraIssueCodes) {
-        tools.exit.failure('No new commits with jira code found since previous release');
+        await tools.exit.failure('No new commits with jira code found since previous release');
     }
 
     const client = new Version3Client({
@@ -46,14 +46,14 @@ async function run(tools: Toolkit) {
         },
     });
 
-    const project = process.env.PROJECT;
+    const project = process.env.PROJECT as string;
 
     const result = await client.issueSearch.searchForIssuesUsingJql({
         jql: `project = ${project} and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
     })
 
     if (!result.issues) {
-        tools.exit.failure('No jira issues found');
+        await tools.exit.failure('No jira issues found');
     }
 
     const version = semver.coerce(latestTag);
@@ -71,6 +71,8 @@ async function run(tools: Toolkit) {
 
     for (const commit of commits) {
         const code = getJiraCodeFromString(commit);
+
+        // @ts-ignore
         const issue = result.issues.find(i => i.key === code);
 
         const type = issue?.fields.issuetype?.name;
@@ -145,17 +147,15 @@ ${notes.tasks.map(a => `
         body += tasks;
     }
 
-    await tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
-        owner: 'Thijs-Van-Drongelen',
-        repo: 'release-strategy-action',
+    await tools.github.repos.createRelease({
         tag_name: `v${version?.raw}`,
         target_commitish: 'main',
         name: `v${version?.raw}`,
         body: body,
-        draft: false,
         prerelease: false,
-        generate_release_notes: false
-    });
+        draft: false,
+        ...tools.context.repo
+    })
 }
 
 run(tools);

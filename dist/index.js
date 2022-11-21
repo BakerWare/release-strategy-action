@@ -91623,15 +91623,15 @@ function run(tools) {
     return __awaiter(this, void 0, void 0, function* () {
         const latestTag = yield git_util_1.getLatestTag(tools);
         if (!latestTag) {
-            tools.exit.failure('No valid tag found');
+            yield tools.exit.failure('No valid tag found');
         }
         const commits = yield git_util_1.getCommitsSinceLatestTag(tools, latestTag);
         if (!commits) {
-            tools.exit.failure('No commits found since previous release');
+            yield tools.exit.failure('No commits found since previous release');
         }
         const jiraIssueCodes = git_util_1.getJiraIssueCodesFromCommits(commits);
         if (!jiraIssueCodes) {
-            tools.exit.failure('No new commits with jira code found since previous release');
+            yield tools.exit.failure('No new commits with jira code found since previous release');
         }
         const client = new jira_js_1.Version3Client({
             host: 'https://bakerware.atlassian.net',
@@ -91648,7 +91648,7 @@ function run(tools) {
             jql: `project = ${project} and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
         });
         if (!result.issues) {
-            tools.exit.failure('No jira issues found');
+            yield tools.exit.failure('No jira issues found');
         }
         const version = semver_1.default.coerce(latestTag);
         const notes = {
@@ -91659,6 +91659,7 @@ function run(tools) {
         };
         for (const commit of commits) {
             const code = git_util_1.getJiraCodeFromString(commit);
+            // @ts-ignore
             const issue = result.issues.find(i => i.key === code);
             const type = (_a = issue === null || issue === void 0 ? void 0 : issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
             if (issue) {
@@ -91717,17 +91718,7 @@ ${notes.tasks.map(a => `
         if (notes.tasks.length > 0) {
             body += tasks;
         }
-        yield tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
-            owner: 'Thijs-Van-Drongelen',
-            repo: 'release-strategy-action',
-            tag_name: `v${version === null || version === void 0 ? void 0 : version.raw}`,
-            target_commitish: 'main',
-            name: `v${version === null || version === void 0 ? void 0 : version.raw}`,
-            body: body,
-            draft: false,
-            prerelease: false,
-            generate_release_notes: false
-        });
+        yield tools.github.repos.createRelease(Object.assign({ tag_name: `v${version === null || version === void 0 ? void 0 : version.raw}`, target_commitish: 'main', name: `v${version === null || version === void 0 ? void 0 : version.raw}`, body: body, prerelease: false, draft: false }, tools.context.repo));
     });
 }
 run(tools);
