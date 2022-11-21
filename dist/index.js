@@ -91764,7 +91764,7 @@ function getLatestTag(tools) {
     return __awaiter(this, void 0, void 0, function* () {
         let latestTag = '';
         yield tools.exec('git describe --tags --abbrev=0', [], {
-            silent: true,
+            silent: false,
             listeners: {
                 stdout: (buffer) => {
                     latestTag = buffer.toString("utf-8").replace('\n', '');
@@ -91779,7 +91779,7 @@ function getCommitsSinceLatestTag(tools, latestTag) {
     return __awaiter(this, void 0, void 0, function* () {
         let commits = [];
         yield tools.exec(`git log ${latestTag}..HEAD --oneline`, [], {
-            silent: true,
+            silent: false,
             listeners: {
                 stdout: (buffer) => {
                     commits = buffer.toString('utf-8').split('\n');

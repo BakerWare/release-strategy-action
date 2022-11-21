@@ -4,7 +4,7 @@ export async function getLatestTag(tools: Toolkit): Promise<string> {
     let latestTag = '';
 
     await tools.exec('git describe --tags --abbrev=0', [], {
-        silent: true,
+        silent: false,
         listeners: {
             stdout: (buffer) => {
                 latestTag = buffer.toString("utf-8").replace('\n', '')
@@ -19,7 +19,7 @@ export async function getCommitsSinceLatestTag(tools: Toolkit, latestTag: string
     let commits: string[] = [];
 
     await tools.exec(`git log ${latestTag}..HEAD --oneline`, [],{
-        silent: true,
+        silent: false,
         listeners: {
             stdout: (buffer) => {
                 commits = buffer.toString('utf-8').split('\n');
