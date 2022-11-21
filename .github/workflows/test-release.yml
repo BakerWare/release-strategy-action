@@ -5,7 +5,7 @@ on:
         inputs:
             merge-develop-to-main:
                 type: boolean
-                description: Merge develop branch to main
+                description: Merge develop to main
 
 jobs:
     release:

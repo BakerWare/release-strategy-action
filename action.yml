@@ -1,9 +1,14 @@
 name: release-strategy-action
 description: Github action that automates release notes
-author: Thijs-Van-Drongelen
+author: thijs.van.drongelen@bakerware.nl
 runs:
     using: "node16"
     main: "./dist/index.js"
 branding:
     icon: crosshair
     color: gray-dark
+inputs:
+    merge-develop-to-main:
+        description: "Merge develop to main"
+        required: true
+        default: "0"

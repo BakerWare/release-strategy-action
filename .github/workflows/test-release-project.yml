@@ -23,7 +23,6 @@ jobs:
                     repo: ${{ github.event.repository.name }}
                     source-branch: develop
                     target-branch: main
-                    commit-message: "Lorem ipsum..."
 
     release:
         runs-on: ubuntu-latest
