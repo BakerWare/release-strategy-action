@@ -26,17 +26,28 @@ jobs:
                     target-branch: main
 
     release:
+        needs: merge
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@master
+
+            -   name: Merge develop -> main
+                uses: devmasx/merge-branch@master
                 with:
-                    fetch-depth: 0
-            -   name: Do something
-                uses: BakerWare/release-strategy-action@main
-                env:
-                    JIRA_USER: ${{ secrets.JIRA_USER }}
-                    JIRA_PASS: ${{ secrets.JIRA_PASS }}
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                    PROJECT: ${{ inputs.project }}
+                    type: now
+                    from_branch: develop
+                    target_branch: main
+                    github_token: ${{ github.token }}
+#        steps:
+#            -   uses: actions/checkout@v2
+#                with:
+#                    fetch-depth: 0
+#            -   name: Do something
+#                uses: BakerWare/release-strategy-action@main
+#                env:
+#                    JIRA_USER: ${{ secrets.JIRA_USER }}
+#                    JIRA_PASS: ${{ secrets.JIRA_PASS }}
+#                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#                    PROJECT: ${{ inputs.project }}
 
 
