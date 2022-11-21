@@ -24,6 +24,7 @@ jobs:
                     from_branch: develop
                     target_branch: main
                     github_token: ${{ github.token }}
+                    message: Merge develop into main
 
     release:
         needs: merge
