@@ -91738,7 +91738,7 @@ var IssueType;
     IssueType["Bug"] = "Bug";
     IssueType["Story"] = "Story";
     IssueType["Refactor"] = "Refactor";
-    IssueType["Task"] = "Task";
+    IssueType["Task"] = "Taak";
 })(IssueType || (IssueType = {}));
 
 

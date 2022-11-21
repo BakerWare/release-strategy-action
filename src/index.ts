@@ -168,5 +168,5 @@ enum IssueType {
     Bug = 'Bug',
     Story = 'Story',
     Refactor = 'Refactor',
-    Task = 'Task',
+    Task = 'Taak',
 }
