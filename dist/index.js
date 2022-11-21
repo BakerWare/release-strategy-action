@@ -91783,7 +91783,7 @@ function getCommitsSinceLatestTag(tools, latestTag) {
             silent: false,
             listeners: {
                 stdout: (buffer) => {
-                    commits = buffer.toString('utf-8').split('\n');
+                    buffer.toString('utf-8').split('\n');
                 }
             }
         });
