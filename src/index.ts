@@ -46,8 +46,10 @@ async function run(tools: Toolkit) {
         },
     });
 
+    const project = process.env.PROJECT;
+
     const result = await client.issueSearch.searchForIssuesUsingJql({
-        jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
+        jql: `project = ${project} and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
     })
 
     if (!result.issues) {
@@ -67,16 +69,11 @@ async function run(tools: Toolkit) {
         tasks: [],
     }
 
-    console.log(commits.length)
-    console.log(commits)
-
     for (const commit of commits) {
         const code = getJiraCodeFromString(commit);
         const issue = result.issues.find(i => i.key === code);
 
         const type = issue?.fields.issuetype?.name;
-
-        console.log(type)
 
         if (issue) {
             if (type === IssueType.Bug) {
@@ -147,8 +144,6 @@ ${notes.tasks.map(a => `
     if (notes.tasks.length > 0) {
         body += tasks;
     }
-
-    console.log(notes)
 
     await tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
         owner: 'Thijs-Van-Drongelen',

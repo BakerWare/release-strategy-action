@@ -2,6 +2,10 @@ name: Test Release
 
 on:
     workflow_call:
+        inputs:
+            project:
+                type: string
+                required: true
 
 jobs:
     something:
@@ -16,3 +20,4 @@ jobs:
                     JIRA_USER: ${{ secrets.JIRA_USER }}
                     JIRA_PASS: ${{ secrets.JIRA_PASS }}
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    PROJECT: ${{ inputs.project }}

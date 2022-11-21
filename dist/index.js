@@ -91643,8 +91643,9 @@ function run(tools) {
                 },
             },
         });
+        const project = process.env.PROJECT;
         const result = yield client.issueSearch.searchForIssuesUsingJql({
-            jql: `project = CN and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
+            jql: `project = ${project} and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
         });
         if (!result.issues) {
             tools.exit.failure('No jira issues found');
@@ -91656,13 +91657,10 @@ function run(tools) {
             refactors: [],
             tasks: [],
         };
-        console.log(commits.length);
-        console.log(commits);
         for (const commit of commits) {
             const code = git_util_1.getJiraCodeFromString(commit);
             const issue = result.issues.find(i => i.key === code);
             const type = (_a = issue === null || issue === void 0 ? void 0 : issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
-            console.log(type);
             if (issue) {
                 if (type === IssueType.Bug) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
@@ -91719,7 +91717,6 @@ ${notes.tasks.map(a => `
         if (notes.tasks.length > 0) {
             body += tasks;
         }
-        console.log(notes);
         yield tools.github.request('POST /repos/BakerWare/release-strategy-action/releases', {
             owner: 'Thijs-Van-Drongelen',
             repo: 'release-strategy-action',
