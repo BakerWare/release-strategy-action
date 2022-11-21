@@ -2,6 +2,10 @@ name: Test release nieuwe versie
 
 on:
     workflow_dispatch:
+        inputs:
+            merge-develop-to-main:
+                type: boolean
+                description: Merge develop branch to main
 
 jobs:
     release:
@@ -9,3 +13,4 @@ jobs:
         secrets: inherit
         with:
             project: CN
+            merge-to-develop: ${{ inputs.merge-develop-to-main }}

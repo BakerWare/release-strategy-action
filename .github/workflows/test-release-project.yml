@@ -6,9 +6,26 @@ on:
             project:
                 type: string
                 required: true
+            merge-to-develop:
+                type: boolean
+                required: true
 
 jobs:
-    something:
+    merge:
+        if: merge-to-develop === true
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Merge develop into main
+                uses: tukasz/direct-merge-action@master
+                with:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    owner: BakerWare
+                    repo: ${{ github.event.repository.name }}
+                    source-branch: develop
+                    target-branch: main
+                    commit-message: "Lorem ipsum..."
+
+    release:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
@@ -21,3 +38,5 @@ jobs:
                     JIRA_PASS: ${{ secrets.JIRA_PASS }}
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                     PROJECT: ${{ inputs.project }}
+
+
