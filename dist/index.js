@@ -91623,7 +91623,7 @@ function run(tools) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const debugMode = (_a = process.env.ACTIONS_RUNNER_DEBUG) !== null && _a !== void 0 ? _a : false;
-        const latestTag = yield git_util_1.getLatestTag(tools);
+        const latestTag = 'v3.18.1'; // await getLatestTag(tools);
         if (!latestTag) {
             tools.exit.failure('No valid tag found');
         }
@@ -91786,7 +91786,6 @@ function getCommitsSinceLatestTag(tools, latestTag) {
     return __awaiter(this, void 0, void 0, function* () {
         let commits = [];
         let myOutput = '';
-        latestTag = 'v3.18.1';
         yield tools.exec(`git log ${latestTag}..HEAD --oneline`, [], {
             silent: false,
             listeners: {
