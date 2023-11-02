@@ -19,8 +19,6 @@ export async function getCommitsSinceLatestTag(tools: Toolkit, latestTag: string
     let commits: string[] = [];
     let myOutput = '';
 
-    latestTag = 'v3.18.1';
-
     await tools.exec(`git log ${latestTag}..HEAD --oneline`, [],{
         silent: false,
         listeners: {

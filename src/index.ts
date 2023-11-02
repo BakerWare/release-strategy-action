@@ -20,7 +20,7 @@ const tools = new Toolkit({
 async function run(tools: Toolkit) {
     const debugMode = process.env.ACTIONS_RUNNER_DEBUG ?? false;
 
-    const latestTag = await getLatestTag(tools);
+    const latestTag =  'v3.18.1'; // await getLatestTag(tools);
 
     if (!latestTag) {
         tools.exit.failure('No valid tag found');
