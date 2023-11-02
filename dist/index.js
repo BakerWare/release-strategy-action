@@ -91623,7 +91623,7 @@ function run(tools) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const debugMode = (_a = process.env.ACTIONS_RUNNER_DEBUG) !== null && _a !== void 0 ? _a : false;
-        const latestTag = 'v3.18.1'; // await getLatestTag(tools);
+        const latestTag = yield git_util_1.getLatestTag(tools);
         if (!latestTag) {
             tools.exit.failure('No valid tag found');
         }
