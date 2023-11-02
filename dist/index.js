@@ -91616,23 +91616,24 @@ const tools = new actions_toolkit_1.Toolkit({
     secrets: [
         'JIRA_USER',
         'JIRA_PASS',
-        'GITHUB_TOKEN',
+        'GITHUB_TOKEN'
     ]
 });
 function run(tools) {
-    var _a;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
+        const debugMode = (_a = process.env.ACTIONS_RUNNER_DEBUG) !== null && _a !== void 0 ? _a : false;
         const latestTag = yield git_util_1.getLatestTag(tools);
         if (!latestTag) {
-            yield tools.exit.failure('No valid tag found');
+            tools.exit.failure('No valid tag found');
         }
         const commits = yield git_util_1.getCommitsSinceLatestTag(tools, latestTag);
         if (!commits) {
-            yield tools.exit.failure('No commits found since previous release');
+            return tools.exit.failure('No commits found since previous release');
         }
         const jiraIssueCodes = git_util_1.getJiraIssueCodesFromCommits(commits);
         if (!jiraIssueCodes) {
-            yield tools.exit.failure('No new commits with jira code found since previous release');
+            tools.exit.failure('No new commits with jira code found since previous release');
         }
         const client = new jira_js_1.Version3Client({
             host: 'https://bakerware.atlassian.net',
@@ -91645,11 +91646,14 @@ function run(tools) {
             },
         });
         const project = process.env.PROJECT;
+        if (debugMode) {
+            console.log(`JQL: project = ${project} and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`);
+        }
         const result = yield client.issueSearch.searchForIssuesUsingJql({
             jql: `project = ${project} and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
         });
         if (!result.issues) {
-            yield tools.exit.failure('No jira issues found');
+            tools.exit.failure('No jira issues found');
         }
         const version = semver_1.default.coerce(latestTag);
         const notes = {
@@ -91662,7 +91666,7 @@ function run(tools) {
             const code = git_util_1.getJiraCodeFromString(commit);
             // @ts-ignore
             const issue = result.issues.find(i => i.key === code);
-            const type = (_a = issue === null || issue === void 0 ? void 0 : issue.fields.issuetype) === null || _a === void 0 ? void 0 : _a.name;
+            const type = (_b = issue === null || issue === void 0 ? void 0 : issue.fields.issuetype) === null || _b === void 0 ? void 0 : _b.name;
             if (issue) {
                 if (type === issue_type_1.IssueType.Bug) {
                     version === null || version === void 0 ? void 0 : version.inc('patch');
@@ -91766,7 +91770,7 @@ exports.getJiraCodeFromString = exports.getJiraIssueCodesFromCommits = exports.g
 function getLatestTag(tools) {
     return __awaiter(this, void 0, void 0, function* () {
         let latestTag = '';
-        yield tools.exec('git describe --tags --abbrev=0', [], {
+        yield tools.exec('git tag --list --sort v:refname --merged | tail -1', [], {
             silent: false,
             listeners: {
                 stdout: (buffer) => {
@@ -91782,6 +91786,7 @@ function getCommitsSinceLatestTag(tools, latestTag) {
     return __awaiter(this, void 0, void 0, function* () {
         let commits = [];
         let myOutput = '';
+        latestTag = 'v3.18.1';
         yield tools.exec(`git log ${latestTag}..HEAD --oneline`, [], {
             silent: false,
             listeners: {

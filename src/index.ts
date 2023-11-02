@@ -13,27 +13,29 @@ const tools = new Toolkit({
     secrets: [
         'JIRA_USER',
         'JIRA_PASS',
-        'GITHUB_TOKEN',
+        'GITHUB_TOKEN'
     ]
 })
 
 async function run(tools: Toolkit) {
+    const debugMode = process.env.ACTIONS_RUNNER_DEBUG ?? false;
+
     const latestTag = await getLatestTag(tools);
 
     if (!latestTag) {
-        await tools.exit.failure('No valid tag found');
+        tools.exit.failure('No valid tag found');
     }
 
     const commits = await getCommitsSinceLatestTag(tools, latestTag);
 
     if (!commits) {
-        await tools.exit.failure('No commits found since previous release');
+        return tools.exit.failure('No commits found since previous release');
     }
 
     const jiraIssueCodes = getJiraIssueCodesFromCommits(commits);
 
     if (!jiraIssueCodes) {
-        await tools.exit.failure('No new commits with jira code found since previous release');
+        tools.exit.failure('No new commits with jira code found since previous release');
     }
 
     const client = new Version3Client({
@@ -49,12 +51,17 @@ async function run(tools: Toolkit) {
 
     const project = process.env.PROJECT as string;
 
+    if (debugMode) {
+        console.log(`JQL: project = ${project} and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`)
+    }
+
     const result = await client.issueSearch.searchForIssuesUsingJql({
         jql: `project = ${project} and key in (${jiraIssueCodes.join(', ')}) ORDER BY created ASC`
     })
 
+
     if (!result.issues) {
-        await tools.exit.failure('No jira issues found');
+        tools.exit.failure('No jira issues found');
     }
 
     const version = semver.coerce(latestTag);

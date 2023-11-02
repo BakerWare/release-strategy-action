@@ -29,6 +29,7 @@ jobs:
     release:
         needs: merge
         runs-on: ubuntu-latest
+        if: always() # Workaround because this job has to run after merge and needs that job if activated
         steps:
             -   uses: actions/checkout@v2
                 with:
@@ -40,5 +41,6 @@ jobs:
                     JIRA_PASS: ${{ secrets.JIRA_PASS }}
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                     PROJECT: ${{ inputs.project }}
+
 
 
