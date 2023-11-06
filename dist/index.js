@@ -91770,7 +91770,7 @@ exports.getJiraCodeFromString = exports.getJiraIssueCodesFromCommits = exports.g
 function getLatestTag(tools) {
     return __awaiter(this, void 0, void 0, function* () {
         let latestTag = '';
-        yield tools.exec('git tag --list --sort v:refname --merged | tail -1', [], {
+        yield tools.exec('git describe --tags --abbrev=0', [], {
             silent: false,
             listeners: {
                 stdout: (buffer) => {
