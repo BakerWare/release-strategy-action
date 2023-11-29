@@ -3,7 +3,7 @@ import { Toolkit } from "actions-toolkit";
 export async function getLatestTag(tools: Toolkit): Promise<string> {
     let latestTag = '';
 
-    await tools.exec('git describe --tags --abbrev=0', [], { //git tag --list --sort v:refname --merged | tail -1
+    await tools.exec('git tag --list \'v[0-9]*.[0-9]*.[0-9]*\' --sort v:refname | tail -1', [], { //git tag --list --sort v:refname --merged | tail -1
         silent: false,
         listeners: {
             stdout: (buffer) => {
