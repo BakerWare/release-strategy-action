@@ -15,6 +15,9 @@ export async function getLatestTag(tools: Toolkit): Promise<string | undefined> 
 
     tags = output.split('\n');
 
+    tools.log.debug(tags);
+    tools.log.debug(output);
+
     return tags.pop();
 }
 
