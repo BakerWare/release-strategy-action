@@ -3,7 +3,7 @@ import { Toolkit } from "actions-toolkit";
 export async function getLatestTag(tools: Toolkit): Promise<string> {
     let latestTag = '';
 
-    await tools.exec('pwd', [], {
+    await tools.exec('git config -l', [], {
         silent: false,
         listeners: {
             stdout: (buffer) => {
