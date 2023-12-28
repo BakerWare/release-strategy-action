@@ -1,22 +1,17 @@
 import { Toolkit } from "actions-toolkit";
+import {getExecOutput} from "@actions/exec";
 
 export async function getLatestTag(tools: Toolkit): Promise<string | undefined> {
     let tags: string[] = [];
-    let output = '';
 
-    await tools.exec('git tag', ['--list', 'v[0-9]*.[0-9]*.[0-9]*', '--sort', 'v:refname'], {
+    const data = await getExecOutput('git tag', ['--list', 'v[0-9]*.[0-9]*.[0-9]*', '--sort', 'v:refname'], {
         silent: false,
-        listeners: {
-            stdout: (buffer: Buffer) => {
-                output += buffer.toString('utf-8');
-            }
-        }
     });
 
-    tags = output.split('\n');
+    tags = data.stdout.split('\n');
 
-    tools.log.debug(tags);
-    tools.log.debug(output);
+    tools.log.info(tags);
+    tools.log.info(data);
 
     return tags.pop();
 }

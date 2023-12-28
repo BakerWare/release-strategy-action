@@ -91752,7 +91752,7 @@ var IssueType;
 /***/ }),
 
 /***/ 18720:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -91767,19 +91767,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getJiraCodeFromString = exports.getJiraIssueCodesFromCommits = exports.getCommitsSinceLatestTag = exports.getLatestTag = void 0;
+const exec_1 = __nccwpck_require__(71514);
 function getLatestTag(tools) {
     return __awaiter(this, void 0, void 0, function* () {
         let tags = [];
-        let output = '';
-        yield tools.exec('git tag', ['--list', 'v[0-9]*.[0-9]*.[0-9]*', '--sort', 'v:refname'], {
+        const data = yield exec_1.getExecOutput('git tag', ['--list', 'v[0-9]*.[0-9]*.[0-9]*', '--sort', 'v:refname'], {
             silent: false,
-            listeners: {
-                stdout: (buffer) => {
-                    output += buffer.toString('utf-8');
-                }
-            }
         });
-        tags = output.split('\n');
+        tags = data.stdout.split('\n');
+        tools.log.info(tags);
+        tools.log.info(data);
         return tags.pop();
     });
 }
