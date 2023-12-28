@@ -3,14 +3,12 @@ import { Toolkit } from "actions-toolkit";
 export async function getLatestTag(tools: Toolkit): Promise<string> {
     let latestTag = '';
 
-    const stdout = (buffer: Buffer) => {
-        console.log(`${buffer.toString()} \n\r`)
-    }
-
-    await tools.exec('git tag', ['--list', 'v[0-9]*.[0-9]*.[0-9]*', '--sort', 'v:refname', '|', 'tail', '-n', '1'], {
+    await tools.exec('git tag', ['--list', 'v[0-9]*.[0-9]*.[0-9]*', '--sort', 'v:refname'], {
         silent: false,
         listeners: {
-            stdout
+            stdout: (buffer: Buffer) => {
+                latestTag = buffer.toString().split('\n').pop() || '';
+            }
         }
     });
 
