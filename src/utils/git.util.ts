@@ -8,7 +8,7 @@ export async function getLatestTag(tools: Toolkit): Promise<string | undefined> 
         silent: false,
     });
 
-    tags = data.stdout.split('\n');
+    tags = data.stdout.split('\n').filter(value => value.length !== 0);
 
     tools.log.info(tags);
     tools.log.info(data);

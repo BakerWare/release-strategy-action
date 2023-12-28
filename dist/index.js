@@ -91774,7 +91774,7 @@ function getLatestTag(tools) {
         const data = yield exec_1.getExecOutput('git tag', ['--list', 'v[0-9]*.[0-9]*.[0-9]*', '--sort', 'v:refname'], {
             silent: false,
         });
-        tags = data.stdout.split('\n');
+        tags = data.stdout.split('\n').filter(value => value.length !== 0);
         tools.log.info(tags);
         tools.log.info(data);
         return tags.pop();
