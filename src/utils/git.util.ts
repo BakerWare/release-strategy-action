@@ -1,18 +1,21 @@
 import { Toolkit } from "actions-toolkit";
 
-export async function getLatestTag(tools: Toolkit): Promise<string> {
-    let latestTag = '';
+export async function getLatestTag(tools: Toolkit): Promise<string | undefined> {
+    let tags: string[] = [];
+    let output = '';
 
     await tools.exec('git tag', ['--list', 'v[0-9]*.[0-9]*.[0-9]*', '--sort', 'v:refname'], {
         silent: false,
         listeners: {
             stdout: (buffer: Buffer) => {
-                latestTag = buffer.toString().split('\n').pop() || '';
+                output += buffer.toString('utf-8');
             }
         }
     });
 
-    return latestTag;
+    tags = output.split('\n');
+
+    return tags.pop();
 }
 
 export async function getCommitsSinceLatestTag(tools: Toolkit, latestTag: string): Promise<string[]> {

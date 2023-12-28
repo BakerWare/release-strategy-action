@@ -91769,16 +91769,18 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getJiraCodeFromString = exports.getJiraIssueCodesFromCommits = exports.getCommitsSinceLatestTag = exports.getLatestTag = void 0;
 function getLatestTag(tools) {
     return __awaiter(this, void 0, void 0, function* () {
-        let latestTag = '';
+        let tags = [];
+        let output = '';
         yield tools.exec('git tag', ['--list', 'v[0-9]*.[0-9]*.[0-9]*', '--sort', 'v:refname'], {
             silent: false,
             listeners: {
                 stdout: (buffer) => {
-                    latestTag = buffer.toString().split('\n').pop() || '';
+                    output += buffer.toString('utf-8');
                 }
             }
         });
-        return latestTag;
+        tags = output.split('\n');
+        return tags.pop();
     });
 }
 exports.getLatestTag = getLatestTag;
