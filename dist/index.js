@@ -91770,10 +91770,19 @@ exports.getJiraCodeFromString = exports.getJiraIssueCodesFromCommits = exports.g
 function getLatestTag(tools) {
     return __awaiter(this, void 0, void 0, function* () {
         let latestTag = '';
+        yield tools.exec('pwd', [], {
+            silent: false,
+            listeners: {
+                stdout: (buffer) => {
+                    console.log(buffer.toString());
+                }
+            }
+        });
         yield tools.exec('git tag --list \'v[0-9]*.[0-9]*.[0-9]*\' --sort v:refname | tail -n 1', [], {
             silent: false,
             listeners: {
                 stdout: (buffer) => {
+                    console.log(buffer.toString());
                     latestTag = buffer.toString("utf-8").replace('\n', '');
                 }
             }
